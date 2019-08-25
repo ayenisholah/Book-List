@@ -45,9 +45,16 @@ UI.prototype.showError = function (message, className) {
   container.insertBefore(div, form);
 
   // Timeout after 3 seconds;
-  setTimeout(function(){
+  setTimeout(function () {
     document.querySelector('.alert').remove()
   }, 3000);
+}
+
+// Delete Book
+UI.prototype.deleteBook = function (target) {
+  if (target.className === 'delete') {
+    target.parentElement.parentElement.remove()
+  }
 }
 
 // Clear book fields
@@ -78,10 +85,19 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
 
     // Show Alert
     ui.showError('Book Added', 'success');
-    
+
     // Clear fields after adding book
     ui.clearFields(book)
   }
   e.preventDefault();
 
 });
+
+// Event listener for delete
+document.getElementById('book-list').addEventListener('click', function (e) {
+  const ui = new UI();
+  ui.deleteBook(e.target)
+  // Show Alert
+  ui.showError('Book deleted', 'success')
+  e.preventDefault();
+})
