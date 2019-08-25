@@ -24,14 +24,38 @@ UI.prototype.addBookToList = function (book) {
   list.appendChild(row);
 }
 
+// Show Alert
+UI.prototype.showError = function (message, className) {
+  // Create element
+  const div = document.createElement('div');
+
+  // Add classes
+  div.className = `alert ${className}`
+
+  // Add text
+  div.appendChild(document.createTextNode(message));
+
+  // Get Parent
+  const container = document.querySelector('.container');
+
+  // Get Form
+  const form = document.querySelector('#book-form');
+
+  // Insert Alert
+  container.insertBefore(div, form);
+
+  // Timeout after 3 seconds;
+  setTimeout(function(){
+    document.querySelector('.alert').remove()
+  }, 3000);
+}
+
 // Clear book fields
 UI.prototype.clearFields = function (books) {
   document.getElementById('title').value = '';
   document.getElementById('author').value = '';
   document.getElementById('isbn').value = '';
-
 }
-
 
 // Event Listeners
 document.getElementById('book-form').addEventListener('submit', function (e) {
@@ -45,13 +69,19 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
 
   // Instatiate UI
   const ui = new UI();
-  console.log(ui);
+  if (title === '' || author === '' || isbn === '') {
+    // Error Alert
+    ui.showError('Please fill in all field', 'error');
+  } else {
+    // Add Book to list
+    ui.addBookToList(book);
 
-  // Add Book to list
-  ui.addBookToList(book);
-
-  // Clear fields after adding book
-  ui.clearFields(book)
+    // Show Alert
+    ui.showError('Book Added', 'success');
+    
+    // Clear fields after adding book
+    ui.clearFields(book)
+  }
   e.preventDefault();
 
 });
